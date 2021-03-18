@@ -9,7 +9,7 @@ const App = () => {
 
     useEffect(() => {
         axios.post('/')
-            .then(({data}) => setMessages(data))
+        .then(({data}) => setMessages(data))
         console.log(messages)
     })
 
