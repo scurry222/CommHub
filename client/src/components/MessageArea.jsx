@@ -5,7 +5,6 @@ const MessageList = styled.ul``;
 
 const MessageArea = ({messages}) => 
     <MessageList>
-        {console.log(messages)}
         {
             messages
             ? messages.map((message, key) => 
