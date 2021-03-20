@@ -28,8 +28,9 @@ server.listen(1337, () => {
 app.post('/', (req, res) => {
     const twiml = new MessagingResponse();
     twiml.message(req.body);
-    var re = /Body="(\w+)"/
-    var body = twiml.response.toString().match(re)
+    var re = /^.*?Body="(\w+)".*?From="(\+\w+)"/
+    var body = twiml.response.toString().split(re)
+    console.log(body);
     if (body) {
         getAPIAndEmit(io, body[1]);
         res.send(body[1]);

@@ -1,3 +1,4 @@
 /node_modules
 /twilio.config.js
+/db.config.js
 /package-lock.json
