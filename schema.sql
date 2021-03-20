@@ -12,6 +12,7 @@ CREATE TABLE contacts (
 
 CREATE TABLE messages (
     message_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    time VARCHAR(25),
     content VARCHAR(250),
     sender VARCHAR(12),
     sendee VARCHAR(12)

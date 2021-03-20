@@ -2,16 +2,20 @@ const express = require('express');
 const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
-const cookieSession = require('cookie-session')
+const cookieSession = require('cookie-session');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 const bodyParser = require('body-parser');
 const path = require('path');
 
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
-const { accountSid, authToken } = require('../twilio.config.js')
 const { getAPIAndEmit } = require('./smsHelpers.js');
+const db = require('../database/db.js');
+const controller = require('./controllers/commController.js')
 
+const { accountSid, authToken } = require('../twilio.config.js')
 const client = require('twilio')(accountSid, authToken);
+
+db.watch();
 
 app.use('/', express.static(path.join(__dirname, '..', 'client/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -25,15 +29,17 @@ server.listen(1337, () => {
 });
 
 
-app.post('/', (req, res) => {
+app.post('/', async(req, res) => {
     const twiml = new MessagingResponse();
     twiml.message(req.body);
-    var re = /^.*?Body="(\w+)".*?From="(\+\w+)"/
-    var body = twiml.response.toString().split(re)
+    const re = /^.*?Body="(\w+)".*?To="(\+\w+)".*?From="(\+\w+)"/
+    const data = twiml.response.toString().split(re)
+    const body = {body: data[1], time: Date.now(), to: data[2], from: data[3]};
+    // console.log(twiml.response.toString())
     console.log(body);
     if (body) {
-        getAPIAndEmit(io, body[1]);
-        res.send(body[1]);
+        getAPIAndEmit(io, body);
+        await controller.addMessage(body, res);
     }
     res.send();
 });
@@ -47,6 +53,8 @@ app.post('/send_sms', (req, res) => {
         })
         .then(message => res.send(message.sid));
 })
+
+app.get('/messages', async(req, res) => await controller.getMessages(res));
 
 io.on('connection', (socket) => {
     console.log('A user connected');
