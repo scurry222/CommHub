@@ -1,18 +1,29 @@
 const db = require('../../database/db.js');
 
-const addMessage = async(body, res) => {
+const addMessage = async(body) =>
     await db.addMessage(body)
-        .then(() => res.status(200).send())
-        .catch((err) => res.status(400).send(err));
-}
+        .then((result) => result);
 
-const getMessages = async(res) => {
-    await db.getMessages((err, data) => err ? res.status(400).send(err) : res.status(200).send(data));
-        // .then((data) => {console.log(data); res.status(200).send(data)})
-        // .catch(err => res.status(400).send(err));
-}
+const addContact = async(number, name) =>
+    await db.addContact(number, name)
+        .then((result) => result);
+
+const searchContacts = async(number) =>
+    await db.searchContacts(number)
+        .then((exists) => Object.values(exists.results[0])[0] === 0 ? false : true);
+
+const findContact = async(number, name) =>
+    await db.findContact(number, name)
+        .then((result) => result.results[0].contact_id);
+
+const getMessages = async(contactId) =>
+    await db.getMessages(contactId)
+        .then((result) => Object.values(result.results[0]).contact_id);
 
 module.exports = {
     addMessage,
+    addContact,
+    searchContacts,
+    findContact,
     getMessages
 }

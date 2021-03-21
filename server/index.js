@@ -35,16 +35,25 @@ app.post('/', async(req, res) => {
     const re = /^.*?Body="(\w+)".*?To="(\+\w+)".*?From="(\+\w+)"/
     const data = twiml.response.toString().split(re)
     const body = {body: data[1], time: Date.now(), to: data[2], from: data[3]};
-    // console.log(twiml.response.toString())
-    console.log(body);
-    if (body) {
-        getAPIAndEmit(io, body);
-        await controller.addMessage(body, res);
-    }
-    res.send();
+    await controller.searchContacts(body.from)
+        .then(async(found) => {
+            if (!found) {
+                await controller.addContact(body.from);
+            }
+        })
+        .then(async() => await controller.findContact(body.from)
+        .then(async(contactId) => {
+            body.contactId = contactId
+            console.log(body)
+            getAPIAndEmit(io, body);
+            await controller.addMessage(body);
+        }))
+        .finally(() => res.send())
+        .catch(err => console.error(err));
 });
 
 app.post('/send_sms', (req, res) => {
+    const { message, sender, sendee } = req.body;
     client.messages
         .create({
             body: `${req.body}`,
