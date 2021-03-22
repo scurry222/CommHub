@@ -29,12 +29,20 @@ const addMessage = async({ body, time, to, from, contactId }) =>
         }
     });
 
-const getMessages = async() => 
+const getMessages = async(contactId) => 
     await db.query({
         sql: `
-            SELECT * FROM messages WHERE contacts.contact_id = messages.message_id ORDER BY time
-        `
+            SELECT * FROM messages WHERE messages.contact_id = :contactId ORDER BY messages.time
+        `,
+        params: { contactId }
     });
+
+const getContacts = async() =>
+    await db.query({
+        sql: `
+            SELECT * FROM contacts
+        `
+    })
 
 const searchContacts = async(number) =>
     await db.query({
@@ -56,29 +64,29 @@ const findContact = async(number) =>
         }
     });
 
-const watch = async() => {
-    const instance = new MySQLEvents(createConnection(config), {
-        startAtEnd: true // to record only the new binary logs, if set to false or you didn't provide it all the events will be console.logged after you start the app
-    })
+// const watch = async() => {
+//     const instance = new MySQLEvents(createConnection(config), {
+//         startAtEnd: true // to record only the new binary logs, if set to false or you didn't provide it all the events will be console.logged after you start the app
+//     })
 
-    await instance.start();
+//     await instance.start();
 
-    instance.addTrigger({
-        name: 'monitoring all statements',
-        expression: 'communications.*',
-        statement: MySQLEvents.STATEMENTS.INSERT,
-        onEvent: (e) => {
-            console.log('hello', e);
-        }
-    });
-    instance.on(MySQLEvents.EVENTS.db_ERROR, console.error);
-}
+//     instance.addTrigger({
+//         name: 'monitoring all statements',
+//         expression: 'communications.*',
+//         statement: MySQLEvents.STATEMENTS.INSERT,
+//         onEvent: (e) => {
+//             console.log('hello', e);
+//         }
+//     });
+//     instance.on(MySQLEvents.EVENTS.db_ERROR, console.error);
+// }
 
 module.exports = {
-    watch,
     addMessage,
     addContact,
     searchContacts,
     findContact,
     getMessages,
+    getContacts,
 };

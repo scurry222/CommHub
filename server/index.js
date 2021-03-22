@@ -9,13 +9,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 const { getAPIAndEmit } = require('./smsHelpers.js');
-const db = require('../database/db.js');
 const controller = require('./controllers/commController.js')
 
-const { accountSid, authToken } = require('../twilio.config.js')
+const { accountSid, authToken } = require('../twilio.config.js');
 const client = require('twilio')(accountSid, authToken);
-
-db.watch();
 
 app.use('/', express.static(path.join(__dirname, '..', 'client/dist')));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,18 +49,44 @@ app.post('/', async(req, res) => {
         .catch(err => console.error(err));
 });
 
-app.post('/send_sms', (req, res) => {
-    const { message, sender, sendee } = req.body;
+app.post('/send_sms', async(req, res) => {
+    const { message, to, from } = req.body;
     client.messages
         .create({
-            body: `${req.body}`,
-            from: '+17032910096',
-            to: '+15104326301'
+            body: `${message}`,
+            from: `${from}`,
+            to: `${to}`
         })
-        .then(message => res.send(message.sid));
-})
+        .then(async(message) => {
+            await controller.searchContacts(message.to)
+        .then(async(found) => {
+            if (!found) {
+                await controller.addContact(message.to);
+            }
+        })
+        .then(async() => await controller.findContact(message.to)
+        .then(async(contactId) => {
+            message.contactId = contactId
+            console.log(message)
+            getAPIAndEmit(io, message);
+            await controller.addMessage(message);
+        }))
+        .finally(() => res.send(message.sid))
+        .catch(err => console.error(err));
+        });
+});
 
-app.get('/messages', async(req, res) => await controller.getMessages(res));
+app.get('/contacts', async(req, res) =>
+    await controller.getContacts()
+        .then((result) => res.send(result))
+        .catch(err => console.error(err))
+);
+
+app.get('/messages/:contactId', async(req, res) =>
+    await controller.getMessages(req.params.contactId)
+        .then((result) => res.send(result))
+        .catch((err) => console.error(err))
+);
 
 io.on('connection', (socket) => {
     console.log('A user connected');

@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mysql": "^2.18.1",
+    "mysql-promisify": "^1.0.2",
     "nodemon": "^2.0.7",
     "path": "^0.12.7",
     "react": "^17.0.1",

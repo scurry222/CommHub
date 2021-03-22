@@ -5,7 +5,7 @@ CREATE DATABASE communications;
 USE communications;
 
 CREATE TABLE contacts (
-    contact_id INT PRIMARY KEY AUTO_INCREMENT,
+    id INT PRIMARY KEY AUTO_INCREMENT,
     number VARCHAR(12) NOT NULL,
     name VARCHAR(50)
 );
@@ -13,7 +13,7 @@ CREATE TABLE contacts (
 CREATE TABLE messages (
     id INT PRIMARY KEY AUTO_INCREMENT,
     contact_id INT NOT NULL,
-    FOREIGN KEY (contact_id) REFERENCES contacts(contact_id) ON DELETE CASCADE,
+    FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE,
     time VARCHAR(25),
     content VARCHAR(250),
     sender VARCHAR(12),
