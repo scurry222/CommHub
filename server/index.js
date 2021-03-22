@@ -15,7 +15,10 @@ const { accountSid, authToken } = require('../twilio.config.js');
 const client = require('twilio')(accountSid, authToken);
 
 app.use('/', express.static(path.join(__dirname, '..', 'client/dist')));
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 app.use(cookieSession({
     keys:[ accountSid, authToken ],
     maxAge: 24 * 60 * 60 * 1000
@@ -81,6 +84,14 @@ app.get('/contacts', async(req, res) =>
         .then((result) => res.send(result))
         .catch(err => console.error(err))
 );
+
+app.post('/contacts', async(req, res) => {
+    const {number, name} = req.body;
+    console.log(number, name)
+    await controller.addContact(number, name)
+        .then(result => res.send(result))
+        .catch(err => console.error(err))
+});
 
 app.get('/messages/:contactId', async(req, res) =>
     await controller.getMessages(req.params.contactId)
