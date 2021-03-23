@@ -31,9 +31,8 @@ server.listen(1337, () => {
 app.post('/', async(req, res) => {
     const twiml = new MessagingResponse();
     twiml.message(req.body);
-    const re = /^.*?Body="(\w+)".*?To="(\+\w+)".*?From="(\+\w+)"/
+    const re = /Body=\"(.*?)\".*?To=\"(.*?)\".*?From=\"(.*?)\"/
     const data = twiml.response.toString().split(re)
-    console.log(data)
     const body = {content: data[1], time: Date.now(), sendee: data[2], sender: data[3]};
     await controller.searchContacts(body.sender)
         .then(async(found) => {
@@ -44,7 +43,6 @@ app.post('/', async(req, res) => {
         .then(async() => await controller.findContact(body.sender)
         .then(async(contactId) => {
             body.contactId = contactId
-            console.log(body)
             getAPIAndEmit(io, body);
             await controller.addMessage(body);
         }))
@@ -56,7 +54,6 @@ app.post('/sendMessage', async(req, res) => {
     const { messageValue, contactId } = req.body;
     await controller.findContactById(contactId)
         .then(async(number) => {
-            console.log('number', number)
             client.messages
             .create({
                 body: messageValue,
@@ -84,7 +81,6 @@ app.get('/contacts', async(req, res) =>
 
 app.post('/contacts', async(req, res) => {
     const {number, name} = req.body;
-    console.log(number, name)
     await controller.addContact(number, name)
         .then(result => res.send(result))
         .catch(err => console.error(err))
@@ -96,7 +92,7 @@ app.get('/messages/:id', async(req, res) =>{
         .catch((err) => console.error(err))
 });
 
-io.on('connection', (socket) => {
-    console.log('A user connected');
-    socket.on('disconnect', () => console.log('user disconnected'));
-});
+// io.on('connection', (socket) => {
+//     console.log('A user connected');
+//     socket.on('disconnect', () => console.log('user disconnected'));
+// });
