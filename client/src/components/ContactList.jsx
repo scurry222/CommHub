@@ -24,7 +24,7 @@ const NumberFormatError = styled.div`
     color: red;
 `;
 
-const ContactList = ({contacts, postContact, setSender}) => {
+const ContactList = ({contacts, postContact, setSender, getMessages}) => {
     const [value, setValue] = useState('');
     const [invalidNumberError, showInvalidNumberError] = useState(false)
 
@@ -49,12 +49,13 @@ const ContactList = ({contacts, postContact, setSender}) => {
             showInvalidNumberError(true);
         }
     }
+
     return (
         <ContactContainer>
             <NewContactForm onSubmit={submitHandler}>
                 <NewContactInput
                     value={value}
-                    onChange={e => setValue(e.target.value)}
+                    onChange={e => setValue(value)}
                 />
                 <NewContactSubmit>Add</NewContactSubmit>
                 {
@@ -64,9 +65,13 @@ const ContactList = ({contacts, postContact, setSender}) => {
                 }
             </NewContactForm>
             {
-                contacts[0]
-                ? contacts[0].map((contact, key) => 
-                    <Contact key={key} onClick={() => setSender(contact.number)}>
+                contacts
+                ? contacts.map((contact, key) => 
+                    <Contact key={key} onClick={() => {
+                            setSender(contact.id);
+                            getMessages(contact.id);
+                        }}
+                    >
                         {contact.number}
                     </Contact>
                 )

@@ -16,23 +16,23 @@ const addContact = async(number, name) =>
         }   
     });
 
-const addMessage = async({ body, time, to, from, contactId }) =>
+const addMessage = async({ content, time, sendee, sender, contactId }) =>
     await db.query({
         sql: `
             INSERT INTO messages
-            (content, time, sender, sendee, contact_id)
+            (content, time, sender, sendee, contactId)
             VALUES
-            (:body, :time, :to, :from, :contactId)
+            (:content, :time, :sendee, :sender, :contactId)
         `,
         params: {
-            body, time, to, from, contactId
+            content, time, sendee, sender, contactId
         }
     });
 
-const getMessages = async(contactId) => 
+const getMessages = async(contactId) =>
     await db.query({
         sql: `
-            SELECT * FROM messages WHERE messages.contact_id = :contactId ORDER BY messages.time
+            SELECT * FROM messages WHERE messages.contactId = :contactId ORDER BY messages.time
         `,
         params: { contactId }
     });

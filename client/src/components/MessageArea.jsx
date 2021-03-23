@@ -5,8 +5,8 @@ const MessageList = styled.ul``;
 const MessageEntry = styled.li`
     list-style-type: none;
     background: #4B5FD9;
-
 `;
+const Message = styled.div``;
 
 const MessageArea = ({messages}) => 
     <MessageList>
@@ -14,8 +14,9 @@ const MessageArea = ({messages}) =>
             messages
             ? messages.map((message, key) => 
                 <MessageEntry key={key}>
-                    <div></div>
-                    {message.body}
+                    <Message>{message.content}</Message>
+
+                    
                 </MessageEntry>
             )
             : null

@@ -22,7 +22,7 @@ const getMessages = async(contactId) =>
 
 const getContacts = async() =>
     await db.getContacts()
-        .then(result => result.results)
+        .then(result => result.results);
 
 module.exports = {
     addMessage,

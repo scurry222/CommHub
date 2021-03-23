@@ -34,14 +34,14 @@ app.post('/', async(req, res) => {
     twiml.message(req.body);
     const re = /^.*?Body="(\w+)".*?To="(\+\w+)".*?From="(\+\w+)"/
     const data = twiml.response.toString().split(re)
-    const body = {body: data[1], time: Date.now(), to: data[2], from: data[3]};
-    await controller.searchContacts(body.from)
+    const body = {content: data[1], time: Date.now(), sendee: data[2], sender: data[3]};
+    await controller.searchContacts(body.sender)
         .then(async(found) => {
             if (!found) {
-                await controller.addContact(body.from);
+                await controller.addContact(body.sender);
             }
         })
-        .then(async() => await controller.findContact(body.from)
+        .then(async() => await controller.findContact(body.sender)
         .then(async(contactId) => {
             body.contactId = contactId
             console.log(body)
@@ -56,18 +56,18 @@ app.post('/send_sms', async(req, res) => {
     const { message, to, from } = req.body;
     client.messages
         .create({
-            body: `${message}`,
-            from: `${from}`,
-            to: `${to}`
+            content: `${message}`,
+            sender: `${from}`,
+            sendee: `${to}`,
         })
         .then(async(message) => {
-            await controller.searchContacts(message.to)
+            await controller.searchContacts(message.sendee)
         .then(async(found) => {
             if (!found) {
-                await controller.addContact(message.to);
+                await controller.addContact(message.sendee);
             }
         })
-        .then(async() => await controller.findContact(message.to)
+        .then(async() => await controller.findContact(message.sendee)
         .then(async(contactId) => {
             message.contactId = contactId
             console.log(message)
@@ -93,11 +93,11 @@ app.post('/contacts', async(req, res) => {
         .catch(err => console.error(err))
 });
 
-app.get('/messages/:contactId', async(req, res) =>
-    await controller.getMessages(req.params.contactId)
+app.get('/messages/:id', async(req, res) =>{
+    await controller.getMessages(req.params.id)
         .then((result) => res.send(result))
         .catch((err) => console.error(err))
-);
+});
 
 io.on('connection', (socket) => {
     console.log('A user connected');
