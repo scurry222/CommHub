@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -24,8 +23,8 @@ const NumberFormatError = styled.div`
     color: red;
 `;
 
-const ContactList = ({contacts, postContact, setSender, getMessages}) => {
-    const [value, setValue] = useState('');
+const ContactList = ({contacts, postContact, setContactId, getMessages}) => {
+    const [contactValue, setContactValue] = useState('');
     const [invalidNumberError, showInvalidNumberError] = useState(false)
 
     const addAndPrune = (phoneNumber) => {
@@ -38,10 +37,10 @@ const ContactList = ({contacts, postContact, setSender, getMessages}) => {
         return pruned;
     }
 
-    const submitHandler = e => {
+    const submitHandler = (e) => {
         e.preventDefault();
         const validPhoneNumber = /(\+*[0-9]{1,2})*\-*([0-9]{1,4})*\ *\(*([0-9]{3})\)*\ *\-*([0-9]{3})\-*([0-9]{4})/;
-        if (value.match(validPhoneNumber)) {
+        if (contactValue.match(validPhoneNumber)) {
             showInvalidNumberError(false);
             postContact({number: addAndPrune(value), name: ''})
             setValue('');
@@ -54,8 +53,8 @@ const ContactList = ({contacts, postContact, setSender, getMessages}) => {
         <ContactContainer>
             <NewContactForm onSubmit={submitHandler}>
                 <NewContactInput
-                    value={value}
-                    onChange={e => setValue(value)}
+                    value={contactValue}
+                    onChange={(e) => setContactValue(e.target.value)}
                 />
                 <NewContactSubmit>Add</NewContactSubmit>
                 {
@@ -65,17 +64,17 @@ const ContactList = ({contacts, postContact, setSender, getMessages}) => {
                 }
             </NewContactForm>
             {
-                contacts
-                ? contacts.map((contact, key) => 
-                    <Contact key={key} onClick={() => {
-                            setSender(contact.id);
+                contacts &&
+                contacts.map((contact, key) => 
+                    <Contact key={key} onClick={(e) => {
+                            e.preventDefault();
+                            setContactId(contact.id);
                             getMessages(contact.id);
                         }}
                     >
                         {contact.number}
                     </Contact>
                 )
-                : null
             }
         </ContactContainer>
 

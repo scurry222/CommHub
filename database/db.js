@@ -64,6 +64,16 @@ const findContact = async(number) =>
         }
     });
 
+const findContactById = async(id) =>
+    await db.query({
+        sql: `
+            SELECT * FROM contacts WHERE contacts.id = :id
+        `,
+        params: {
+            id
+        }
+    });
+
 // const watch = async() => {
 //     const instance = new MySQLEvents(createConnection(config), {
 //         startAtEnd: true // to record only the new binary logs, if set to false or you didn't provide it all the events will be console.logged after you start the app
@@ -87,6 +97,7 @@ module.exports = {
     addContact,
     searchContacts,
     findContact,
+    findContactById,
     getMessages,
     getContacts,
 };

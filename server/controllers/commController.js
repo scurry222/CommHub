@@ -16,6 +16,10 @@ const findContact = async(number, name) =>
     await db.findContact(number, name)
         .then(result => result.results[0].id);
 
+const findContactById = async(contactId) =>
+    await db.findContactById(contactId)
+        .then(result => result.results[0].number);
+
 const getMessages = async(contactId) =>
     await db.getMessages(contactId)
         .then(result => result.results);
@@ -29,6 +33,7 @@ module.exports = {
     addContact,
     searchContacts,
     findContact,
+    findContactById,
     getMessages,
     getContacts,
 }

@@ -11,15 +11,14 @@ const Message = styled.div``;
 const MessageArea = ({messages}) => 
     <MessageList>
         {
-            messages
-            ? messages.map((message, key) => 
+            messages &&
+            messages.map((message, key) => 
                 <MessageEntry key={key}>
                     <Message>{message.content}</Message>
 
                     
                 </MessageEntry>
             )
-            : null
         }
     </MessageList>
 

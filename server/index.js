@@ -5,7 +5,6 @@ const io = require('socket.io')(server);
 const cookieSession = require('cookie-session');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
-const bodyParser = require('body-parser');
 const path = require('path');
 
 const { getAPIAndEmit } = require('./smsHelpers.js');
@@ -34,6 +33,7 @@ app.post('/', async(req, res) => {
     twiml.message(req.body);
     const re = /^.*?Body="(\w+)".*?To="(\+\w+)".*?From="(\+\w+)"/
     const data = twiml.response.toString().split(re)
+    console.log(data)
     const body = {content: data[1], time: Date.now(), sendee: data[2], sender: data[3]};
     await controller.searchContacts(body.sender)
         .then(async(found) => {
@@ -52,31 +52,28 @@ app.post('/', async(req, res) => {
         .catch(err => console.error(err));
 });
 
-app.post('/send_sms', async(req, res) => {
-    const { message, to, from } = req.body;
-    client.messages
-        .create({
-            content: `${message}`,
-            sender: `${from}`,
-            sendee: `${to}`,
-        })
-        .then(async(message) => {
-            await controller.searchContacts(message.sendee)
-        .then(async(found) => {
-            if (!found) {
-                await controller.addContact(message.sendee);
-            }
-        })
-        .then(async() => await controller.findContact(message.sendee)
-        .then(async(contactId) => {
-            message.contactId = contactId
-            console.log(message)
-            getAPIAndEmit(io, message);
-            await controller.addMessage(message);
-        }))
-        .finally(() => res.send(message.sid))
+app.post('/sendMessage', async(req, res) => {
+    const { messageValue, contactId } = req.body;
+    await controller.findContactById(contactId)
+        .then(async(number) => {
+            console.log('number', number)
+            client.messages
+            .create({
+                body: messageValue,
+                from: '+17032910096',
+                to: number,
+                contactId
+            })
+            .then(async({body, to, from}) => {
+                const removeTrialAccountBS = /Sent from your Twilio trial account - (.*)/
+                const content = body.split(removeTrialAccountBS)[1];
+                const message = {content, sender: from, sendee: to, contactId, time: Date.now()}
+                await controller.addMessage(message);
+                getAPIAndEmit(io, message);
+            })
+        .finally(() => res.send())
         .catch(err => console.error(err));
-        });
+    });
 });
 
 app.get('/contacts', async(req, res) =>
@@ -101,6 +98,5 @@ app.get('/messages/:id', async(req, res) =>{
 
 io.on('connection', (socket) => {
     console.log('A user connected');
-
     socket.on('disconnect', () => console.log('user disconnected'));
 });
