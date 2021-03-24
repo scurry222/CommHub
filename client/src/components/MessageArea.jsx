@@ -29,7 +29,7 @@ const Time = styled.div`
     color: #D9DAE3;
 `;
 
-const Sender = styled.div`
+const Sendee = styled.div`
     font-size: 0.75rem;
     color: #D9DAE3;
     font-weight: bolder;
@@ -47,7 +47,7 @@ const MessageArea = ({messages}) => {
                 messages &&
                 messages.map((message, key) => 
                     <MessageEntry key={key}>
-                        <Sender>{message.sender}</Sender>
+                        <Sendee>{message.sendee}</Sendee>
                         <Message>{message.content}</Message>
                         <Time>
                             <Moment fromNow ago interval={60000}>

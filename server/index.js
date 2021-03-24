@@ -10,7 +10,7 @@ const path = require('path');
 const { getAPIAndEmit } = require('./smsHelpers.js');
 const controller = require('./controllers/commController.js')
 
-const { accountSid, authToken } = require('../twilio.config.js');
+const { accountSid, authToken, twilioNumber } = require('../twilio.config.js');
 const client = require('twilio')(accountSid, authToken);
 
 app.use('/', express.static(path.join(__dirname, '..', 'client/dist')));
@@ -54,17 +54,16 @@ app.post('/sendMessage', async(req, res) => {
     const { messageValue, contactId } = req.body;
     await controller.findContactById(contactId)
         .then(async(number) => {
+            console.log(messageValue)
             client.messages
             .create({
                 body: messageValue,
-                from: '+17032910096',
+                from: `${twilioNumber}`,
                 to: number,
                 contactId
             })
             .then(async({body, to, from}) => {
-                const removeTrialAccountBS = /Sent from your Twilio trial account - (.*)/
-                const content = body.split(removeTrialAccountBS)[1];
-                const message = {content, sender: from, sendee: to, contactId, time: new Date().toISOString()}
+                const message = {content: body, sender: from, sendee: to, contactId, time: new Date().toISOString()}
                 await controller.addMessage(message);
                 getAPIAndEmit(io, message);
             })
