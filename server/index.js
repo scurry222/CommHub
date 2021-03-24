@@ -33,7 +33,7 @@ app.post('/', async(req, res) => {
     twiml.message(req.body);
     const re = /Body=\"(.*?)\".*?To=\"(.*?)\".*?From=\"(.*?)\"/
     const data = twiml.response.toString().split(re)
-    const body = {content: data[1], time: Date.now(), sendee: data[2], sender: data[3]};
+    const body = {content: data[1], time: new Date().toISOString(), sendee: data[2], sender: data[3]};
     await controller.searchContacts(body.sender)
         .then(async(found) => {
             if (!found) {
@@ -64,7 +64,7 @@ app.post('/sendMessage', async(req, res) => {
             .then(async({body, to, from}) => {
                 const removeTrialAccountBS = /Sent from your Twilio trial account - (.*)/
                 const content = body.split(removeTrialAccountBS)[1];
-                const message = {content, sender: from, sendee: to, contactId, time: Date.now()}
+                const message = {content, sender: from, sendee: to, contactId, time: new Date().toISOString()}
                 await controller.addMessage(message);
                 getAPIAndEmit(io, message);
             })
