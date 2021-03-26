@@ -1,6 +1,6 @@
 # CommHub
 
-[](client/dist/static/CommHub.gif)
+[](https://github.com/scurry222/CommHub/client/dist/static/CommHub.gif)
 
 
 
