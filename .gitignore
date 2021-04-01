@@ -2,3 +2,4 @@
 /twilio.config.js
 /db.config.js
 /package-lock.json
+/client/dist/vendors-node_modules_howler_dist_howler_js.bundle.js

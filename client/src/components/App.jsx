@@ -7,6 +7,7 @@ import axios from 'axios';
 import ContactList from './ContactList.jsx';
 import MessageArea from './MessageArea.jsx';
 import TextInput from './TextInput.jsx';
+import useSound from 'use-sound';
 
 const ENDPOINT = 'http://localhost:1337';
 
@@ -20,16 +21,24 @@ const App = () => {
     const [ contactId, setContactId ] = useState(0);
     const [ contact, setContact ] = useState('');
     const [ contacts, addContact ] = useState([]);
+    const [ newMessage ] = useSound(
+        '..//static/me-too-603.mp3',
+        { volume: 1 }
+    )
 
     useEffect(() => {
         getContacts();
 
         const socket = socketIOClient(ENDPOINT);
-        socket.on('FromAPI', ({ contactId }) => {
+        socket.on('FromAPI', ({ id }) => {
             getContacts();
-            getMessagesWithContact(contactId);
+            console.log(contactId, id)
+            if (id === contactId) {
+                getMessagesWithContact(id);
+            }
+            newMessage();
         });
-    }, [contactId, messages])
+    }, [contactId, messages, newMessage])
 
     const getContacts = () =>
         axios.get('/contacts')

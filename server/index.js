@@ -54,7 +54,6 @@ app.post('/sendMessage', async(req, res) => {
     const { messageValue, contactId } = req.body;
     await controller.findContactById(contactId)
         .then(async(number) => {
-            console.log(messageValue)
             client.messages
             .create({
                 body: messageValue,

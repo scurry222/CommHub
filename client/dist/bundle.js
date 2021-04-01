@@ -389,7 +389,7 @@ eval("\n\nvar bind = __webpack_require__(/*! ./helpers/bind */ \"./node_modules/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! socket.io-client */ \"./node_modules/socket.io-client/wrapper.mjs\");\n/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! styled-components */ \"./node_modules/styled-components/dist/styled-components.browser.esm.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _ContactList_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ContactList.jsx */ \"./client/src/components/ContactList.jsx\");\n/* harmony import */ var _MessageArea_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MessageArea.jsx */ \"./client/src/components/MessageArea.jsx\");\n/* harmony import */ var _TextInput_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TextInput.jsx */ \"./client/src/components/TextInput.jsx\");\nvar _templateObject;\n\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\"); }\n\nfunction _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === \"string\") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === \"Object\" && o.constructor) n = o.constructor.name; if (n === \"Map\" || n === \"Set\") return Array.from(o); if (n === \"Arguments\" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }\n\nfunction _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }\n\nfunction _iterableToArrayLimit(arr, i) { if (typeof Symbol === \"undefined\" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nfunction _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\n\n\n\n\n\n\n\nvar ENDPOINT = 'http://localhost:1337';\nvar AppContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__.default.div(_templateObject || (_templateObject = _taggedTemplateLiteral([\"\\n    width: 100%;\\n    height: 100%;\\n\"])));\n\nvar App = function App() {\n  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),\n      _useState2 = _slicedToArray(_useState, 2),\n      messages = _useState2[0],\n      setMessages = _useState2[1];\n\n  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),\n      _useState4 = _slicedToArray(_useState3, 2),\n      contactId = _useState4[0],\n      setContactId = _useState4[1];\n\n  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),\n      _useState6 = _slicedToArray(_useState5, 2),\n      contact = _useState6[0],\n      setContact = _useState6[1];\n\n  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),\n      _useState8 = _slicedToArray(_useState7, 2),\n      contacts = _useState8[0],\n      addContact = _useState8[1];\n\n  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {\n    getContacts();\n    var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_1__.default)(ENDPOINT);\n    socket.on('FromAPI', function (_ref) {\n      var contactId = _ref.contactId;\n      getContacts();\n      getMessagesWithContact(contactId);\n    });\n  }, [contactId, messages]);\n\n  var getContacts = function getContacts() {\n    return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/contacts').then(function (_ref2) {\n      var data = _ref2.data;\n      return addContact(data);\n    });\n  };\n\n  var getMessagesWithContact = function getMessagesWithContact(id) {\n    axios__WEBPACK_IMPORTED_MODULE_2___default().get(\"/messages/\".concat(id)).then(function (_ref3) {\n      var data = _ref3.data;\n      return setMessages(data);\n    });\n  };\n\n  var postContact = function postContact(_ref4) {\n    var number = _ref4.number,\n        name = _ref4.name;\n    return axios__WEBPACK_IMPORTED_MODULE_2___default().post('/contacts', {\n      number: number,\n      name: name\n    }).then(function () {\n      return getContacts();\n    });\n  };\n\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(AppContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ContactList_jsx__WEBPACK_IMPORTED_MODULE_3__.default, {\n    contacts: contacts,\n    postContact: postContact,\n    setContactId: setContactId,\n    setContact: setContact,\n    getMessages: getMessagesWithContact\n  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_MessageArea_jsx__WEBPACK_IMPORTED_MODULE_4__.default, {\n    messages: messages,\n    contactId: contactId\n  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TextInput_jsx__WEBPACK_IMPORTED_MODULE_5__.default, {\n    contactId: contactId,\n    contact: contact\n  }));\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);\n\n//# sourceURL=webpack://commhub/./client/src/components/App.jsx?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! socket.io-client */ \"./node_modules/socket.io-client/wrapper.mjs\");\n/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ \"./node_modules/styled-components/dist/styled-components.browser.esm.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _ContactList_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ContactList.jsx */ \"./client/src/components/ContactList.jsx\");\n/* harmony import */ var _MessageArea_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./MessageArea.jsx */ \"./client/src/components/MessageArea.jsx\");\n/* harmony import */ var _TextInput_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TextInput.jsx */ \"./client/src/components/TextInput.jsx\");\n/* harmony import */ var use_sound__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! use-sound */ \"./node_modules/use-sound/dist/use-sound.esm.js\");\nvar _templateObject;\n\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\"); }\n\nfunction _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === \"string\") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === \"Object\" && o.constructor) n = o.constructor.name; if (n === \"Map\" || n === \"Set\") return Array.from(o); if (n === \"Arguments\" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }\n\nfunction _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }\n\nfunction _iterableToArrayLimit(arr, i) { if (typeof Symbol === \"undefined\" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nfunction _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\n\n\n\n\n\n\n\n\nvar ENDPOINT = 'http://localhost:1337';\nvar AppContainer = styled_components__WEBPACK_IMPORTED_MODULE_7__.default.div(_templateObject || (_templateObject = _taggedTemplateLiteral([\"\\n    width: 100%;\\n    height: 100%;\\n\"])));\n\nvar App = function App() {\n  var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),\n      _useState2 = _slicedToArray(_useState, 2),\n      messages = _useState2[0],\n      setMessages = _useState2[1];\n\n  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0),\n      _useState4 = _slicedToArray(_useState3, 2),\n      contactId = _useState4[0],\n      setContactId = _useState4[1];\n\n  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),\n      _useState6 = _slicedToArray(_useState5, 2),\n      contact = _useState6[0],\n      setContact = _useState6[1];\n\n  var _useState7 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),\n      _useState8 = _slicedToArray(_useState7, 2),\n      contacts = _useState8[0],\n      addContact = _useState8[1];\n\n  var _useSound = (0,use_sound__WEBPACK_IMPORTED_MODULE_6__.default)('..//static/me-too-603.mp3', {\n    volume: 1\n  }),\n      _useSound2 = _slicedToArray(_useSound, 1),\n      newMessage = _useSound2[0];\n\n  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {\n    getContacts();\n    var socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_1__.default)(ENDPOINT);\n    socket.on('FromAPI', function (_ref) {\n      var id = _ref.id;\n      getContacts();\n      console.log(contactId, id);\n\n      if (id === contactId) {\n        getMessagesWithContact(id);\n      }\n\n      newMessage();\n    });\n  }, [contactId, messages, newMessage]);\n\n  var getContacts = function getContacts() {\n    return axios__WEBPACK_IMPORTED_MODULE_2___default().get('/contacts').then(function (_ref2) {\n      var data = _ref2.data;\n      return addContact(data);\n    });\n  };\n\n  var getMessagesWithContact = function getMessagesWithContact(id) {\n    axios__WEBPACK_IMPORTED_MODULE_2___default().get(\"/messages/\".concat(id)).then(function (_ref3) {\n      var data = _ref3.data;\n      return setMessages(data);\n    });\n  };\n\n  var postContact = function postContact(_ref4) {\n    var number = _ref4.number,\n        name = _ref4.name;\n    return axios__WEBPACK_IMPORTED_MODULE_2___default().post('/contacts', {\n      number: number,\n      name: name\n    }).then(function () {\n      return getContacts();\n    });\n  };\n\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(AppContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ContactList_jsx__WEBPACK_IMPORTED_MODULE_3__.default, {\n    contacts: contacts,\n    postContact: postContact,\n    setContactId: setContactId,\n    setContact: setContact,\n    getMessages: getMessagesWithContact\n  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_MessageArea_jsx__WEBPACK_IMPORTED_MODULE_4__.default, {\n    messages: messages,\n    contactId: contactId\n  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_TextInput_jsx__WEBPACK_IMPORTED_MODULE_5__.default, {\n    contactId: contactId,\n    contact: contact\n  }));\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);\n\n//# sourceURL=webpack://commhub/./client/src/components/App.jsx?");
 
 /***/ }),
 
@@ -2373,6 +2373,17 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+/***/ "./node_modules/use-sound/dist/use-sound.esm.js":
+/*!******************************************************!*\
+  !*** ./node_modules/use-sound/dist/use-sound.esm.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\n\nfunction _extends() {\n  _extends = Object.assign || function (target) {\n    for (var i = 1; i < arguments.length; i++) {\n      var source = arguments[i];\n\n      for (var key in source) {\n        if (Object.prototype.hasOwnProperty.call(source, key)) {\n          target[key] = source[key];\n        }\n      }\n    }\n\n    return target;\n  };\n\n  return _extends.apply(this, arguments);\n}\n\nfunction _objectWithoutPropertiesLoose(source, excluded) {\n  if (source == null) return {};\n  var target = {};\n  var sourceKeys = Object.keys(source);\n  var key, i;\n\n  for (i = 0; i < sourceKeys.length; i++) {\n    key = sourceKeys[i];\n    if (excluded.indexOf(key) >= 0) continue;\n    target[key] = source[key];\n  }\n\n  return target;\n}\n\nfunction useOnMount(callback) {\n  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(callback, []);\n}\n\nfunction useSound(url, _ref) {\n  if (_ref === void 0) {\n    _ref = {};\n  }\n\n  var _ref2 = _ref,\n      _ref2$volume = _ref2.volume,\n      volume = _ref2$volume === void 0 ? 1 : _ref2$volume,\n      _ref2$playbackRate = _ref2.playbackRate,\n      playbackRate = _ref2$playbackRate === void 0 ? 1 : _ref2$playbackRate,\n      _ref2$soundEnabled = _ref2.soundEnabled,\n      soundEnabled = _ref2$soundEnabled === void 0 ? true : _ref2$soundEnabled,\n      _ref2$interrupt = _ref2.interrupt,\n      interrupt = _ref2$interrupt === void 0 ? false : _ref2$interrupt,\n      onload = _ref2.onload,\n      delegated = _objectWithoutPropertiesLoose(_ref2, [\"volume\", \"playbackRate\", \"soundEnabled\", \"interrupt\", \"onload\"]);\n\n  var HowlConstructor = react__WEBPACK_IMPORTED_MODULE_0__.useRef(null);\n  var isMounted = react__WEBPACK_IMPORTED_MODULE_0__.useRef(false);\n\n  var _React$useState = react__WEBPACK_IMPORTED_MODULE_0__.useState(false),\n      isPlaying = _React$useState[0],\n      setIsPlaying = _React$useState[1];\n\n  var _React$useState2 = react__WEBPACK_IMPORTED_MODULE_0__.useState(null),\n      duration = _React$useState2[0],\n      setDuration = _React$useState2[1];\n\n  var _React$useState3 = react__WEBPACK_IMPORTED_MODULE_0__.useState(null),\n      sound = _React$useState3[0],\n      setSound = _React$useState3[1];\n\n  var handleLoad = function handleLoad() {\n    if (typeof onload === 'function') {\n      // @ts-ignore\n      onload.call(this);\n    }\n\n    if (isMounted.current) {\n      // @ts-ignore\n      setDuration(this.duration() * 1000);\n    }\n  }; // We want to lazy-load Howler, since sounds can't play on load anyway.\n\n\n  useOnMount(function () {\n    __webpack_require__.e(/*! import() */ \"vendors-node_modules_howler_dist_howler_js\").then(__webpack_require__.t.bind(__webpack_require__, /*! howler */ \"./node_modules/howler/dist/howler.js\", 23)).then(function (mod) {\n      if (!isMounted.current) {\n        HowlConstructor.current = mod.Howl;\n        isMounted.current = true;\n\n        var _sound = new HowlConstructor.current(_extends({\n          src: [url],\n          volume: volume,\n          rate: playbackRate,\n          onload: handleLoad\n        }, delegated));\n\n        setSound(_sound);\n      }\n    });\n    return function () {\n      isMounted.current = false;\n    };\n  }); // When the URL changes, we have to do a whole thing where we recreate\n  // the Howl instance. This is because Howler doesn't expose a way to\n  // tweak the sound\n\n  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {\n    if (HowlConstructor.current && sound) {\n      setSound(new HowlConstructor.current(_extends({\n        src: [url],\n        volume: volume,\n        onload: handleLoad\n      }, delegated)));\n    } // The linter wants to run this effect whenever ANYTHING changes,\n    // but very specifically I only want to recreate the Howl instance\n    // when the `url` changes. Other changes should have no effect.\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n\n  }, [url]); // Whenever volume/playbackRate are changed, change those properties\n  // on the sound instance.\n\n  react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {\n    if (sound) {\n      sound.volume(volume);\n      sound.rate(playbackRate);\n    } // A weird bug means that including the `sound` here can trigger an\n    // error on unmount, where the state loses track of the sprites??\n    // No idea, but anyway I don't need to re-run this if only the `sound`\n    // changes.\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n\n  }, [volume, playbackRate]);\n  var play = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(function (options) {\n    if (typeof options === 'undefined') {\n      options = {};\n    }\n\n    if (!sound || !soundEnabled && !options.forceSoundEnabled) {\n      return;\n    }\n\n    if (interrupt) {\n      sound.stop();\n    }\n\n    if (options.playbackRate) {\n      sound.rate(options.playbackRate);\n    }\n\n    sound.play(options.id);\n\n    if (isMounted.current) {\n      sound.once('end', function () {\n        // If sound is not looping\n        if (!sound.playing()) {\n          setIsPlaying(false);\n        }\n      });\n    }\n\n    if (isMounted.current) {\n      setIsPlaying(true);\n    }\n  }, [sound, soundEnabled, interrupt]);\n  var stop = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(function (id) {\n    if (!sound) {\n      return;\n    }\n\n    sound.stop(id);\n\n    if (isMounted.current) {\n      setIsPlaying(false);\n    }\n  }, [sound]);\n  var pause = react__WEBPACK_IMPORTED_MODULE_0__.useCallback(function (id) {\n    if (!sound) {\n      return;\n    }\n\n    sound.pause(id);\n\n    if (isMounted.current) {\n      setIsPlaying(false);\n    }\n  }, [sound]);\n  var returnedValue = [play, {\n    sound: sound,\n    stop: stop,\n    pause: pause,\n    isPlaying: isPlaying,\n    duration: duration\n  }];\n  return returnedValue;\n}\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (useSound);\n//# sourceMappingURL=use-sound.esm.js.map\n\n\n//# sourceURL=webpack://commhub/./node_modules/use-sound/dist/use-sound.esm.js?");
+
+/***/ }),
+
 /***/ "./node_modules/yeast/index.js":
 /*!*************************************!*\
   !*** ./node_modules/yeast/index.js ***!
@@ -2413,6 +2424,9 @@ eval("\n\nvar alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
 /******/ 	(() => {
@@ -2426,6 +2440,36 @@ eval("\n\nvar alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/create fake namespace object */
+/******/ 	(() => {
+/******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
+/******/ 		var leafPrototypes;
+/******/ 		// create a fake namespace object
+/******/ 		// mode & 1: value is a module id, require it
+/******/ 		// mode & 2: merge all properties of value into the ns
+/******/ 		// mode & 4: return value when already ns object
+/******/ 		// mode & 16: return value when it's Promise-like
+/******/ 		// mode & 8|1: behave like require
+/******/ 		__webpack_require__.t = function(value, mode) {
+/******/ 			if(mode & 1) value = this(value);
+/******/ 			if(mode & 8) return value;
+/******/ 			if(typeof value === 'object' && value) {
+/******/ 				if((mode & 4) && value.__esModule) return value;
+/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
+/******/ 			}
+/******/ 			var ns = Object.create(null);
+/******/ 			__webpack_require__.r(ns);
+/******/ 			var def = {};
+/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
+/******/ 			for(var current = mode & 2 && value; typeof current == 'object' && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
+/******/ 			}
+/******/ 			def['default'] = () => (value);
+/******/ 			__webpack_require__.d(ns, def);
+/******/ 			return ns;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -2435,6 +2479,28 @@ eval("\n\nvar alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/ensure chunk */
+/******/ 	(() => {
+/******/ 		__webpack_require__.f = {};
+/******/ 		// This file contains only the entry chunk.
+/******/ 		// The chunk loading function for additional chunks
+/******/ 		__webpack_require__.e = (chunkId) => {
+/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
+/******/ 				__webpack_require__.f[key](chunkId, promises);
+/******/ 				return promises;
+/******/ 			}, []));
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + ".bundle.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -2455,6 +2521,52 @@ eval("\n\nvar alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/load script */
+/******/ 	(() => {
+/******/ 		var inProgress = {};
+/******/ 		var dataWebpackPrefix = "commhub:";
+/******/ 		// loadScript function to load a script via script tag
+/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
+/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
+/******/ 			var script, needAttach;
+/******/ 			if(key !== undefined) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				for(var i = 0; i < scripts.length; i++) {
+/******/ 					var s = scripts[i];
+/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
+/******/ 				}
+/******/ 			}
+/******/ 			if(!script) {
+/******/ 				needAttach = true;
+/******/ 				script = document.createElement('script');
+/******/ 		
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 				script.src = url;
+/******/ 			}
+/******/ 			inProgress[url] = [done];
+/******/ 			var onScriptComplete = (prev, event) => {
+/******/ 				// avoid mem leaks in IE.
+/******/ 				script.onerror = script.onload = null;
+/******/ 				clearTimeout(timeout);
+/******/ 				var doneFns = inProgress[url];
+/******/ 				delete inProgress[url];
+/******/ 				script.parentNode && script.parentNode.removeChild(script);
+/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
+/******/ 				if(prev) return prev(event);
+/******/ 			}
+/******/ 			;
+/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
+/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
+/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
+/******/ 			needAttach && document.head.appendChild(script);
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -2473,6 +2585,114 @@ eval("\n\nvar alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqr
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"index": 0
+/******/ 		};
+/******/ 		
+/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
+/******/ 				// JSONP chunk loading for javascript
+/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
+/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
+/******/ 		
+/******/ 					// a Promise means "currently loading".
+/******/ 					if(installedChunkData) {
+/******/ 						promises.push(installedChunkData[2]);
+/******/ 					} else {
+/******/ 						if(true) { // all chunks have JS
+/******/ 							// setup Promise in chunk cache
+/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
+/******/ 							promises.push(installedChunkData[2] = promise);
+/******/ 		
+/******/ 							// start chunk loading
+/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
+/******/ 							// create error before stack unwound to get useful stacktrace later
+/******/ 							var error = new Error();
+/******/ 							var loadingEnded = (event) => {
+/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
+/******/ 									installedChunkData = installedChunks[chunkId];
+/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
+/******/ 									if(installedChunkData) {
+/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 										var realSrc = event && event.target && event.target.src;
+/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 										error.name = 'ChunkLoadError';
+/******/ 										error.type = errorType;
+/******/ 										error.request = realSrc;
+/******/ 										installedChunkData[1](error);
+/******/ 									}
+/******/ 								}
+/******/ 							};
+/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
+/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 					}
+/******/ 				}
+/******/ 		};
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		// no on chunks loaded
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			for(moduleId in moreModules) {
+/******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 				}
+/******/ 			}
+/******/ 			if(runtime) runtime(__webpack_require__);
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 		
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkcommhub"] = self["webpackChunkcommhub"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
 /************************************************************************/
