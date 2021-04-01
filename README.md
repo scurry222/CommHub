@@ -1,6 +1,6 @@
 # CommHub
 
-[](./client/dist/static/CommHub.gif)
+![](client/dist/static/CommHub.gif)
 
 
 
